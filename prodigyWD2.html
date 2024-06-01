@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <style>
+    /* CSS styling */
+    .stopwatch {
+      text-align: center;
+      font-size: 24px;
+    }
+    .controls {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="stopwatch">
+    <div id="display">00:00:00</div>
+    <div class="controls">
+      <button onclick="startStop()">Start</button>
+      <button onclick="pauseResume()">Pause</button>
+      <button onclick="reset()">Reset</button>
+    </div>
+    <div id="laps"></div>
+  </div>
+
+  <script>
+    // JavaScript functionality
+    let startTime;
+    let elapsedTime = 0;
+    let timerInterval;
+
+    function startStop() {
+      if (!timerInterval) {
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(updateTime, 10);
+      } else {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function updateTime() {
+      const currentTime = Date.now();
+      elapsedTime = currentTime - startTime;
+      displayTime(elapsedTime);
+    }
+
+    function displayTime(time) {
+  const display = document.getElementById('display');
+  const minutes = Math.floor(time / (1000 * 60));
+  const seconds = Math.floor((time % (1000 * 60)) / 1000);
+  const milliseconds = Math.floor((time % 1000) / 10);
+  display.textContent = `${formatTime(minutes)}:${formatTime(seconds)}:${formatTime(milliseconds)}`;
+}
+function formatTime(time) {
+  return time < 10 ? `0${time}` : time;
+}
+    function pauseResume() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      } else {
+        startStop();
+      }
+    }
+
+    function reset() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      elapsedTime = 0;
+      displayTime(elapsedTime);
+      document.getElementById('laps').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
