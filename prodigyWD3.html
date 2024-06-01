@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 10px;
+    margin: 20px auto;
+  }
+  .cell {
+    width: 100px;
+    height: 100px;
+    background-color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    cursor: pointer;
+  }
+  .cell:hover {
+    background-color: #ccc;
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board">
+  <div class="cell" onclick="handleClick(0)"></div>
+  <div class="cell" onclick="handleClick(1)"></div>
+  <div class="cell" onclick="handleClick(2)"></div>
+  <div class="cell" onclick="handleClick(3)"></div>
+  <div class="cell" onclick="handleClick(4)"></div>
+  <div class="cell" onclick="handleClick(5)"></div>
+  <div class="cell" onclick="handleClick(6)"></div>
+  <div class="cell" onclick="handleClick(7)"></div>
+  <div class="cell" onclick="handleClick(8)"></div>
+</div>
+
+<script>
+  let currentPlayer = 'X';
+  let board = ['', '', '', '', '', '', '', '', ''];
+
+  function handleClick(index) {
+    if (board[index] === '') {
+      board[index] = currentPlayer;
+      document.getElementById('board').children[index].innerText = currentPlayer;
+      if (checkWinner()) {
+        alert(currentPlayer + ' wins!');
+        resetGame();
+      } else if (board.every(cell => cell !== '')) {
+        alert('It\'s a tie!');
+        resetGame();
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      }
+    }
+  }
+
+  function checkWinner() {
+    const winningCombos = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+
+    return winningCombos.some(combo => {
+      return board[combo[0]] !== '' &&
+             board[combo[0]] === board[combo[1]] &&
+             board[combo[0]] === board[combo[2]];
+    });
+  }
+
+  function resetGame() {
+    board = ['', '', '', '', '', '', '', '', ''];
+    document.getElementById('board').childNodes.forEach(cell => {
+      cell.innerText = '';
+    });
+    currentPlayer = 'X';
+  }
+</script>
+</body>
+</html>
